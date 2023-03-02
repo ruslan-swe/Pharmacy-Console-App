@@ -37,8 +37,8 @@ namespace Presentation
                 ConsoleHelper.WriteWithColor("██████╗ ██╗  ██╗ █████╗ ██████╗ ███╗   ███╗ █████╗  ██████╗██╗   ██╗     ██████╗ ██████╗    ", ConsoleColor.Yellow);
                 ConsoleHelper.WriteWithColor("██╔══██╗██║  ██║██╔══██╗██╔══██╗████╗ ████║██╔══██╗██╔════╝╚██╗ ██╔╝    ██╔════╝██╔═══██╗   ", ConsoleColor.Yellow);
                 ConsoleHelper.WriteWithColor("██████╔╝███████║███████║██████╔╝██╔████╔██║███████║██║      ╚████╔╝     ██║     ██║   ██║   ", ConsoleColor.Yellow);
-                ConsoleHelper.WriteBWithColor("██╔═══╝ ██╔══██║██╔══██║██╔══██╗██║╚██╔╝██║██╔══██║██║       ╚██╔╝      ██║     ██║   ██║   ", ConsoleColor.Yellow);
-                ConsoleHelper.WriteBWithColor("██║     ██║  ██║██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║╚██████╗   ██║       ╚██████╗╚██████╔╝██╗", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("██╔═══╝ ██╔══██║██╔══██║██╔══██╗██║╚██╔╝██║██╔══██║██║       ╚██╔╝      ██║     ██║   ██║   ", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("██║     ██║  ██║██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║╚██████╗   ██║       ╚██████╗╚██████╔╝██╗", ConsoleColor.Yellow);
                 ConsoleHelper.WriteWithColor("╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝   ╚═╝        ╚═════╝ ╚═════╝ ╚═╝", ConsoleColor.Yellow);
                 Console.WriteLine("\n\n");
                 ConsoleHelper.WriteWithColor("[1] - Owner Menu", ConsoleColor.Cyan);
@@ -86,10 +86,13 @@ namespace Presentation
                                     _ownerService.Create();
                                     break;
                                 case (int)OwnerMenu.UpdateOwner:
+                                    _ownerService.Update();
                                     break;
                                 case (int)OwnerMenu.RemoveOwner:
+                                    _ownerService.Delete();
                                     break;
                                 case (int)OwnerMenu.GetAllOwners:
+                                    _ownerService.GetAll();
                                     break;
                                 case (int)OwnerMenu.MainMenu:
                                     Console.Clear();
@@ -129,6 +132,7 @@ namespace Presentation
                             switch (input)
                             {
                                 case (int)DrugStoreMenu.CreateDrugStore:
+                                    _drugStoreService.Create();
                                     break;
                                 case (int)DrugStoreMenu.UpdateDrugStore:
                                     break;
