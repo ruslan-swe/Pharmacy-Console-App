@@ -8,6 +8,10 @@ namespace Core.Entities
 {
     public class DrugStore : BaseEntity
     {
+        public DrugStore()
+        {
+            Druggists = new List<Druggist>();
+        }
         public string Address { get; set; }
         public string ContactNumber { get; set; }
         public string Email { get; set; }

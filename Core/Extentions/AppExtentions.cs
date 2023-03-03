@@ -15,7 +15,11 @@ namespace Core.Extentions
         }
         public static bool IsDetails(this string details)
         {
-            return Regex.IsMatch(details, @"/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u");
+            return Regex.IsMatch(details, "^([a-zA-Z]+?)([-\\s'][a-zA-Z]+)*?$");
+        }
+        public static bool IsNumber(this string number)
+        {
+            return Regex.IsMatch(number, "^\\+?[1-9][0-9]{7,14}$");
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Presentation
                             {
                                 Console.Clear();
                                 ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 4", ConsoleColor.Red);
-                                goto MainMenuCheck;
+                                goto OwnerMenu;
                             }
                             switch (input)
                             {
@@ -127,7 +127,7 @@ namespace Presentation
                             {
                                 Console.Clear();
                                 ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 6", ConsoleColor.Red);
-                                goto MainMenuCheck;
+                                goto DrugStoreMenu;
                             }
                             switch (input)
                             {
@@ -135,12 +135,16 @@ namespace Presentation
                                     _drugStoreService.Create();
                                     break;
                                 case (int)DrugStoreMenu.UpdateDrugStore:
+                                    _drugStoreService.Update();
                                     break;
                                 case (int)DrugStoreMenu.RemoveDrugStore:
+
                                     break;
                                 case (int)DrugStoreMenu.GetAllDrugStores:
                                     break;
                                 case (int)DrugStoreMenu.GetAllByOwner:
+                                    break;
+                                case (int)DrugStoreMenu.Sale:
                                     break;
                                 case (int)DrugStoreMenu.MainMenu:
                                     Console.Clear();
@@ -173,7 +177,7 @@ namespace Presentation
                             {
                                 Console.Clear();
                                 ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 5", ConsoleColor.Red);
-                                goto MainMenuCheck;
+                                goto DruggistMenuCheck;
                             }
                             switch (input)
                             {
@@ -218,7 +222,7 @@ namespace Presentation
                             {
                                 Console.Clear();
                                 ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 5", ConsoleColor.Red);
-                                goto MainMenuCheck;
+                                goto DrugMenuCheck;
                             }
                             switch (input)
                             {
@@ -247,7 +251,7 @@ namespace Presentation
                         Console.Clear();
                     LogOutCheck:
                         Console.WriteLine("\n\n\n");
-                        ConsoleHelper.WriteWithColor("Are you sure you want to log out of system? y/n", ConsoleColor.Red);
+                        ConsoleHelper.WriteWithColor("Are you sure you want to log out of system? y/n", ConsoleColor.Magenta);
                         ConsoleKeyInfo cki = Console.ReadKey();
                         if (cki.Key == ConsoleKey.Y)
                         {
@@ -263,14 +267,14 @@ namespace Presentation
                         {
                             Console.Clear();
                             Console.WriteLine("\n\n\n");
-                            ConsoleHelper.WriteWithColor("Please select y/n", ConsoleColor.Red);
+                            ConsoleHelper.WriteWithColor("Please select y/n", ConsoleColor.Yellow);
                             goto LogOutCheck;
                         }
                     case (int)MainMenuOptions.Exit:
                         Console.Clear();
                     ExitCheck:
                         Console.WriteLine("\n\n\n");
-                        ConsoleHelper.WriteWithColor("Are you sure you want to terminate current session? y/n", ConsoleColor.Red);
+                        ConsoleHelper.WriteWithColor("Are you sure you want to terminate current session? y/n", ConsoleColor.Magenta);
                         ConsoleKeyInfo cki2 = Console.ReadKey();
                         if (cki2.Key == ConsoleKey.Y)
                         {
@@ -285,12 +289,12 @@ namespace Presentation
                         {
                             Console.Clear();
                             Console.WriteLine("\n\n\n");
-                            ConsoleHelper.WriteWithColor("Please select y/n", ConsoleColor.Red);
+                            ConsoleHelper.WriteWithColor("Please select y/n", ConsoleColor.Yellow);
                             goto ExitCheck;
                         }
                     default:
                         Console.Clear();
-                        ConsoleHelper.WriteWithColor("Please select valid option from 0 to 5", ConsoleColor.Red);
+                        ConsoleHelper.WriteWithColor("Please select valid option from 0 to 5", ConsoleColor.Yellow);
                         goto MainMenuCheck;
                 }
             }

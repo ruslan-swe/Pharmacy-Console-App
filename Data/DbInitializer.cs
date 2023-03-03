@@ -19,8 +19,8 @@ namespace Data
                 new Admin
                 {
                     Id = ++Id,
-                    Username = "sysAdmin",
-                    Password = PasswordHasher.Encrypt("catchme")
+                    Username = "1",
+                    Password = PasswordHasher.Encrypt("1")
                 },
                 new Admin
                 {
