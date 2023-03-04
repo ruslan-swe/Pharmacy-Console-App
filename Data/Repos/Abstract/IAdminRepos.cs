@@ -10,6 +10,5 @@ namespace Data.Repos.Abstract
     public interface IAdminRepos
     {
         Admin GetByUsernameAndPassword(string username, string password);
-        public void LogOut();
     }
 }

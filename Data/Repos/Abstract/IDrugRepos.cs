@@ -10,5 +10,6 @@ namespace Data.Repos.Abstract
     public interface IDrugRepos : IRepos<Drug>
     {
          List<Drug> GetAllByDrugStore(int id);
+         List<Drug> GetDrugsByPrice(double price);
     }
 }

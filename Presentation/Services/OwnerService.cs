@@ -302,17 +302,18 @@ namespace Presentation.Services
                 ConsoleHelper.WriteWithColor($"Owner ID : {owner.Id} / Fullname : {owner.Name} {owner.Surname}", ConsoleColor.Cyan);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor($"List of drugstores of {owner.Name} {owner.Surname}", ConsoleColor.Yellow);
-                Console.WriteLine("\n");
-
-                var drugstores =_drugStoreRepos.GetAll();
-                if (drugstores.Count == 0)
+                ConsoleHelper.WriteWithColor("----------------------------------------------------------------------------",ConsoleColor.DarkMagenta);
+               
+                if (owner.DrugStores.Count == 0)
                 {
                     ConsoleHelper.WriteWithColor("This owner doesn't have any drugstores", ConsoleColor.Yellow);
+                    ConsoleHelper.WriteWithColor("----------------------------------------------------------------------------", ConsoleColor.DarkMagenta);
                 }
-                foreach (var drugstore in drugstores)
+                foreach (var drugstore in owner.DrugStores)
                 {
                     ConsoleHelper.WriteWithColor($"Group Id : {drugstore.Id} / Name : {drugstore.Name} / Adress : {drugstore.Address}", ConsoleColor.Cyan);
                 }
+                ConsoleHelper.WriteWithColor("----------------------------------------------------------------------------", ConsoleColor.DarkMagenta);
 
             }
             Console.WriteLine("\n");

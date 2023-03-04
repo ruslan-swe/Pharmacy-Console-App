@@ -138,11 +138,13 @@ namespace Presentation
                                     _drugStoreService.Update();
                                     break;
                                 case (int)DrugStoreMenu.RemoveDrugStore:
-
+                                    _drugStoreService.Delete();
                                     break;
                                 case (int)DrugStoreMenu.GetAllDrugStores:
+                                    _drugStoreService.GetAll();
                                     break;
                                 case (int)DrugStoreMenu.GetAllByOwner:
+                                    _drugStoreService.GetAllByOwner();
                                     break;
                                 case (int)DrugStoreMenu.Sale:
                                     break;
@@ -169,6 +171,7 @@ namespace Presentation
                             ConsoleHelper.WriteWithColor("[2] - Update Druggist", ConsoleColor.Cyan);
                             ConsoleHelper.WriteWithColor("[3] - Remove Druggist", ConsoleColor.Cyan);
                             ConsoleHelper.WriteWithColor("[4] - Get All Druggists", ConsoleColor.Cyan);
+                            ConsoleHelper.WriteWithColor("[5] - Get All Druggists By Drugstore", ConsoleColor.Cyan);
                             ConsoleHelper.WriteWithColor("[0] - Back To Main Menu", ConsoleColor.Cyan);
 
                             int input;
@@ -182,14 +185,19 @@ namespace Presentation
                             switch (input)
                             {
                                 case (int)DruggistMenu.CreateDruggist:
+                                    _druggistService.Create();
                                     break;
                                 case (int)DruggistMenu.UpdateDruggist:
+                                    _druggistService.Update();
                                     break;
                                 case (int)DruggistMenu.RemoveDruggist:
+                                    _druggistService.Delete();
                                     break;
                                 case (int)DruggistMenu.GetAllDruggists:
+                                    _druggistService.GetAll();
                                     break;
                                 case (int)DruggistMenu.GetAllByDrugstore:
+                                    _druggistService.GetAllByDrugstore();
                                     break;
                                 case (int)DruggistMenu.MainMenu:
                                     Console.Clear();
@@ -214,6 +222,8 @@ namespace Presentation
                             ConsoleHelper.WriteWithColor("[2] - Update Drug", ConsoleColor.Cyan);
                             ConsoleHelper.WriteWithColor("[3] - Remove Drug", ConsoleColor.Cyan);
                             ConsoleHelper.WriteWithColor("[4] - Get All Drugs", ConsoleColor.Cyan);
+                            ConsoleHelper.WriteWithColor("[5] - Get All Drugs by Drugstore", ConsoleColor.Cyan);
+                            ConsoleHelper.WriteWithColor("[6] - Filter", ConsoleColor.Cyan);
                             ConsoleHelper.WriteWithColor("[0] - Back To Main Menu", ConsoleColor.Cyan);
 
                             int input;
@@ -221,20 +231,25 @@ namespace Presentation
                             if (!isRightInput)
                             {
                                 Console.Clear();
-                                ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 5", ConsoleColor.Red);
+                                ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 6", ConsoleColor.Red);
                                 goto DrugMenuCheck;
                             }
                             switch (input)
                             {
                                 case (int)DrugMenu.CreateDrug:
+                                    _drugService.Create();
                                     break;
                                 case (int)DrugMenu.UpdateDrug:
+                                    _drugService.Update();
                                     break;
                                 case (int)DrugMenu.RemoveDrug:
+                                    _drugService.Delete();
                                     break;
-                                case (int)DrugMenu.GetAllDrugs:
+                                case (int)DrugMenu.GetAllDrugs:                                  
                                     break;
                                 case (int)DrugMenu.GetAllByDrugStore:
+                                    break;
+                                case (int)DrugMenu.Filter:
                                     break;
                                 case (int)DrugMenu.MainMenu:
                                     Console.Clear();

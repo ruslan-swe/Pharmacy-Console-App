@@ -22,7 +22,7 @@ namespace Data.Repos.Concrete
         }
         public void Add(Owner owner)
         {
-            ++id;
+            id++;
             owner.Id = id;
             DbContext.Owners.Add(owner);
         }

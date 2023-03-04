@@ -16,9 +16,5 @@ namespace Data.Repos.Concrete
         {
             return DbContext.Admins.FirstOrDefault(a => a.Username.ToLower() == username.ToLower() && PasswordHasher.Decrypt(a.Password) == password);
         }
-        public void LogOut()
-        {
-            
-        }
     }
 }

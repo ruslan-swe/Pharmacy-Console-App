@@ -20,6 +20,10 @@ namespace Data.Repos.Concrete
         {
             return DbContext.Drugs.Where(s => s.DrugStore.Id == id).ToList();
         }
+        public List<Drug> GetDrugsByPrice(double price)
+        {
+            return DbContext.Drugs.Where(d => d.Price <= price).ToList();
+        }
         public Drug Get(int id)
         {
             return DbContext.Drugs.FirstOrDefault(d => d.Id == id);

@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Extentions;
 using Core.Helpers;
+using Data.Repos.Abstract;
 using Data.Repos.Concrete;
 using System;
 using System.Collections.Generic;
@@ -140,7 +141,7 @@ namespace Presentation.Services
                 Console.ReadKey();
                 goto OwnerCheck;
             }
-            
+
             var drugstore = new DrugStore
             {
                 Name = name,
@@ -151,6 +152,7 @@ namespace Presentation.Services
             };
 
             _drugStoreRepos.Add(drugstore);
+            dbOwner.DrugStores.Add(drugstore);
 
             Console.Clear();
             Console.WriteLine("\n");
@@ -323,9 +325,12 @@ namespace Presentation.Services
                 dbDrugstore.Address = address;
                 dbDrugstore.ContactNumber = number;
                 dbDrugstore.Email = email;
+                dbDrugstore.Owner.DrugStores.Remove(dbDrugstore);
                 dbDrugstore.Owner = dbOwner;
 
                 _drugStoreRepos.Update(dbDrugstore);
+                dbOwner.DrugStores.Add(dbDrugstore);
+
                 Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor($"{oldStoreName} of {oldOwnerName} drugstore details updated into {dbDrugstore.Name} {dbDrugstore.Owner} successfully!", ConsoleColor.DarkGreen);
@@ -355,13 +360,13 @@ namespace Presentation.Services
                 Console.WriteLine("\n");
             }
             Console.WriteLine("\n");
-            ConsoleHelper.WriteWithColor("Enter Owner ID to delete it's profile or 0 to return back to menu", ConsoleColor.DarkYellow);
+            ConsoleHelper.WriteWithColor("Enter Drugstore ID to delete it's profile or 0 to return back to menu", ConsoleColor.DarkYellow);
             int id;
             bool isRightInput = int.TryParse(Console.ReadLine(), out id);
             if (!isRightInput)
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Wrong Input! Enter Owner ID to delete it's profile", ConsoleColor.Red);
+                ConsoleHelper.WriteWithColor("Wrong Input! Enter drugstore ID to delete it's profile", ConsoleColor.Red);
                 ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
@@ -372,22 +377,55 @@ namespace Presentation.Services
             {
                 return;
             }
-            var dbOwner = _ownerRepos.Get(id);
-            if (dbOwner == null)
+            var dbDrugstore = _drugStoreRepos.Get(id);
+            if (dbDrugstore == null)
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("There is no owner with this ID number.", ConsoleColor.Red);
+                ConsoleHelper.WriteWithColor("There is no drugstore with this ID number.", ConsoleColor.Red);
                 ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
                 Console.ReadKey();
                 goto IdCheck;
             }
+            else
+            {
+            yesNoCheck:
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteContinuosly("Are you sure you want to remove this drugstore profile y/n", ConsoleColor.Magenta);
+                ConsoleKeyInfo cki2 = Console.ReadKey();
+                if (cki2.Key == ConsoleKey.Y)
+                {
+                    Console.Clear();
+                    _drugStoreRepos.Delete(dbDrugstore);
+                    Console.WriteLine("\n");
+                    ConsoleHelper.WriteWithColor($"{dbDrugstore.Name} drugstore of {dbDrugstore.Owner.Name} {dbDrugstore.Owner.Surname} owner successfully deleted!", ConsoleColor.DarkGreen);
+                    Console.WriteLine("\n");
+                    ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                    Console.ReadKey();
+                }
+                else if (cki2.Key == ConsoleKey.N)
+                {
+                    Console.Clear();
+                    goto IdCheck;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("\n");
+                    ConsoleHelper.WriteWithColor("Please select y/n", ConsoleColor.Red);
+                    Console.WriteLine("\n");
+                    ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
+                    Console.ReadKey();
+                    goto yesNoCheck;
+                }
+            }
         }
         public void GetAll()
         {
             Console.Clear();
-            if (_drugStoreRepos.GetAll().Count == 0)
+            var drugstores = _drugStoreRepos.GetAll();
+            if (drugstores.Count == 0)
             {
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("There is no drugstore profiles in database", ConsoleColor.Yellow);
@@ -395,6 +433,64 @@ namespace Presentation.Services
                 ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
                 Console.ReadKey();
                 return;
+            }
+
+            Console.Clear();
+            foreach (var drugstore in drugstores)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor($"Drugstore ID : {drugstore.Id} / Owner Fullname : {drugstore.Owner.Name} {drugstore.Owner.Surname}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drugstore Adress : {drugstore.Address}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drugstore Contact Number : {drugstore.ContactNumber}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drugstore Email Address : {drugstore.Email}", ConsoleColor.Cyan);
+                Console.WriteLine("\n");
+            }
+            Console.WriteLine("\n");
+            ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+            Console.ReadKey();
+        }
+        public void GetAllByOwner()
+        {
+        IdCheck:
+            var owners = _ownerRepos.GetAll();
+            foreach (var owner in owners)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor($"Owner ID : {owner.Id} / Fullname : {owner.Name} {owner.Surname} ", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor("----------------------------------------------------------------------------", ConsoleColor.DarkMagenta);
+            }
+            Console.WriteLine("\n");
+            ConsoleHelper.WriteWithColor("Enter Owner ID to get all drugstores by owner or 0 to return back to menu", ConsoleColor.DarkYellow);
+            int id;
+            bool isRightInput = int.TryParse(Console.ReadLine(), out id);
+            if (!isRightInput)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Wrong Input! Enter Owner ID from list above ", ConsoleColor.Red);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                Console.ReadKey();
+                goto IdCheck;
+            }
+            else if (id == 0)
+            {
+                return;
+            }
+            var drugstores = _drugStoreRepos.GetAllByOwner(id);
+            if (drugstores.Count == 0)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("This Owner does not have any drugstores assigned to it.", ConsoleColor.Red);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                Console.ReadKey();
+                goto IdCheck;
+            }
+            Console.Clear();
+            foreach (var drugstore in drugstores)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor($"Drugstore ID : {drugstore.Id} / Name : {drugstore.Name} / Address  {drugstore.Address}", ConsoleColor.Cyan);
             }
         }
     }
