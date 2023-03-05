@@ -24,7 +24,7 @@ namespace Presentation.Services
             if (String.IsNullOrEmpty(name))
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -48,7 +48,7 @@ namespace Presentation.Services
             if (String.IsNullOrEmpty(surname))
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Surname is required and must be filled", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Surname is required and must be filled", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -107,7 +107,6 @@ namespace Presentation.Services
                 Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Wrong Input!", ConsoleColor.Red);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -120,9 +119,9 @@ namespace Presentation.Services
             var dbOwner = _ownerRepos.Get(id);
             if (dbOwner == null)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("There is no owner with this ID number.", ConsoleColor.Yellow);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("There is no owner with this ID number.", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -137,8 +136,9 @@ namespace Presentation.Services
                 string name = Console.ReadLine();
                 if (String.IsNullOrEmpty(name))
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
-                    ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Yellow);
+                    ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Red);
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                     Console.ReadKey();
@@ -146,6 +146,7 @@ namespace Presentation.Services
                 }
                 if (name.IsDetails() == false)
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Name cannot contain numbers", ConsoleColor.Red);
                     Console.WriteLine("\n");
@@ -160,6 +161,7 @@ namespace Presentation.Services
                 string surname = Console.ReadLine();
                 if (String.IsNullOrEmpty(surname))
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Surname is required and must be filled", ConsoleColor.Yellow);
                     Console.WriteLine("\n");
@@ -169,6 +171,7 @@ namespace Presentation.Services
                 }
                 if (surname.IsDetails() == false)
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Surname cannot contain numbers", ConsoleColor.Red);
                     Console.WriteLine("\n");
@@ -188,7 +191,7 @@ namespace Presentation.Services
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor($"{oldOwnerName} {oldOwnerSurname} Owner profile updated into {dbOwner.Name} {dbOwner.Surname} successfully!", ConsoleColor.DarkGreen);
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
             }
         }
@@ -218,9 +221,9 @@ namespace Presentation.Services
             bool isRightInput = int.TryParse(Console.ReadLine(), out id);
             if (!isRightInput)
             {
+                Console.Clear ();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Wrong Input! Enter Owner ID to delete it's profile", ConsoleColor.Red);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -233,33 +236,33 @@ namespace Presentation.Services
             var dbOwner = _ownerRepos.Get(id);
             if (dbOwner == null)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("There is no owner with this ID number.", ConsoleColor.Red);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
                 goto IdCheck;
             }
             else
             {
             yesNoCheck:
+                Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteContinuosly("Are you sure you want to remove this owner profile y/n", ConsoleColor.Magenta);
+                ConsoleHelper.WriteContinuosly($"Are you sure you want to remove {dbOwner.Name} {dbOwner.Surname} owner profile y/n", ConsoleColor.Magenta);
                 ConsoleKeyInfo cki2 = Console.ReadKey();
                 if (cki2.Key == ConsoleKey.Y)
                 {
-                    Console.Clear();
                     _ownerRepos.Delete(dbOwner);
+                    Console.Clear();
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor($"{dbOwner.Name} {dbOwner.Surname} owner profile successfully deleted!", ConsoleColor.DarkGreen);
                     Console.WriteLine("\n");
-                    ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                    ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                     Console.ReadKey();
                 }
                 else if (cki2.Key == ConsoleKey.N)
                 {
-                    Console.Clear();
                     goto IdCheck;
                 }
                 else
@@ -280,7 +283,6 @@ namespace Presentation.Services
             var owners = _ownerRepos.GetAll();
             if (owners.Count == 0)
             {
-                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("There is no owner profiles in database", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
@@ -288,20 +290,18 @@ namespace Presentation.Services
                 Console.ReadKey();
                 return;
             }
-            Console.Clear();
 
             foreach (var owner in owners)
             {
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor($"Owner ID : {owner.Id} / Fullname : {owner.Name} {owner.Surname}", ConsoleColor.Cyan);
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor($"List of drugstores of {owner.Name} {owner.Surname}", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor($"Drugstore list of {owner.Name} {owner.Surname}", ConsoleColor.Yellow);
                 ConsoleHelper.WriteWithColor("----------------------------------------------------------------------------",ConsoleColor.DarkMagenta);
                
                 if (owner.DrugStores.Count == 0)
                 {
                     ConsoleHelper.WriteWithColor("This owner doesn't have any drugstores", ConsoleColor.Yellow);
-                    ConsoleHelper.WriteWithColor("----------------------------------------------------------------------------", ConsoleColor.DarkMagenta);
                 }
                 foreach (var drugstore in owner.DrugStores)
                 {

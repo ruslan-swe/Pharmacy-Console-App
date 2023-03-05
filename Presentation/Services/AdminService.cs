@@ -16,11 +16,11 @@ namespace Presentation.Services
         {
         LoginCheck:
             Console.WriteLine("\n\n\n");
-            ConsoleHelper.WriteWithColor("---- Login ----",ConsoleColor.Blue);
-            ConsoleHelper.WriteContinuosly("Username :",ConsoleColor.Blue);
+            ConsoleHelper.WriteWithColor("---- Login ----",ConsoleColor.Yellow);
+            ConsoleHelper.WriteContinuosly("Username :",ConsoleColor.Yellow);
             string usernameInput = Console.ReadLine();
 
-            ConsoleHelper.WriteContinuosly("Password :", ConsoleColor.Blue);
+            ConsoleHelper.WriteContinuosly("Password :", ConsoleColor.Yellow);
             var passwordInput = string.Empty;
             ConsoleKey key;
             do

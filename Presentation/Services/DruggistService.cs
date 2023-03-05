@@ -16,26 +16,27 @@ namespace Presentation.Services
         }
         public void Create()
         {
+            Console.Clear();
             var drugstores = _drugStoreRepos.GetAll();
             if (drugstores.Count == 0)
             {
-                Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("There is no Drugstores to assign new druggist to! Please first create Drugstore", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("There is no Drugstores to assign new druggist to! Please first create Drugstore", ConsoleColor.Red);
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor(" Press any key to continue", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor(" Press any key to return to main menu", ConsoleColor.Yellow);
                 Console.ReadKey();
                 return;
             }
+
         NameCheck:
-            Console.Clear();
             Console.WriteLine("\n");
             ConsoleHelper.WriteContinuosly("Enter druggist name:", ConsoleColor.DarkYellow);
             string name = Console.ReadLine();
             if (String.IsNullOrEmpty(name))
             {
+                Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -43,6 +44,7 @@ namespace Presentation.Services
             }
             if (name.IsDetails() == false)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Name cannot contain numbers", ConsoleColor.Red);
                 Console.WriteLine("\n");
@@ -58,8 +60,9 @@ namespace Presentation.Services
             string surname = Console.ReadLine();
             if (String.IsNullOrEmpty(surname))
             {
+                Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Surname is required and must be filled", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Surname is required and must be filled", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -67,6 +70,7 @@ namespace Presentation.Services
             }
             if (surname.IsDetails() == false)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Surname cannot contain numbers", ConsoleColor.Red);
                 Console.WriteLine("\n");
@@ -132,22 +136,24 @@ namespace Presentation.Services
                 Console.ReadKey();
                 goto ExperienceCheck;
             }
-            if (age < exp)
+            if (age - 18 < exp)
             {
                 Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Druggist's age cannot be set lower than his experience!", ConsoleColor.Red);
+                ConsoleHelper.WriteWithColor("Druggist's experience cannot be set higher than his age!", ConsoleColor.Red);
                 ConsoleHelper.WriteWithColor("Please enter valid age", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
                 goto ExperienceCheck;
             }
+
         DrugStoreCheck:
             Console.Clear();
+            Console.WriteLine("\n\n");
             foreach (var drugStore in drugstores)
             {
-                ConsoleHelper.WriteWithColor($"Drugstore ID : {drugStore.Id} / Owner Fullname : {drugStore.Owner.Name} {drugStore.Owner.Surname}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drugstore ID : {drugStore.Id}/ Name : {drugStore.Name} / Owner Fullname : {drugStore.Owner.Name} {drugStore.Owner.Surname}", ConsoleColor.Cyan);
                 Console.WriteLine("\n");
             }
             Console.WriteLine("\n");
@@ -156,9 +162,9 @@ namespace Presentation.Services
             isRightInput = int.TryParse(Console.ReadLine(), out id);
             if (!isRightInput)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Wrong Input! Enter drugstore ID to assign new druggist to", ConsoleColor.Red);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -167,9 +173,9 @@ namespace Presentation.Services
             var dbDrugstore = _drugStoreRepos.Get(id);
             if (dbDrugstore == null)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("There is no drugstore with this ID number.", ConsoleColor.Red);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -197,6 +203,7 @@ namespace Presentation.Services
         }
         public void Update()
         {
+            Console.Clear();
             var druggists = _druggistRepos.GetAll();
             if (druggists.Count == 0)
             {
@@ -213,7 +220,7 @@ namespace Presentation.Services
             Console.WriteLine("\n");
             foreach (var druggist in druggists)
             {
-                ConsoleHelper.WriteWithColor($"Druggist ID : {druggist.Id} / Fullname : {druggist.Name} {druggist.Surname} / Drugstore Id : {druggist.DrugStore.Id} / Drugstore Name : {druggist.DrugStore.Name}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Druggist ID : {druggist.Id} / Fullname : {druggist.Name} {druggist.Surname} / Drugstore Id : {druggist.DrugStore.Id} /  Name : {druggist.DrugStore.Name}", ConsoleColor.Cyan);
                 Console.WriteLine("\n");
             }
             ConsoleHelper.WriteWithColor("Enter Druggist ID to update its details or 0 to return back to menu", ConsoleColor.DarkYellow);
@@ -223,8 +230,7 @@ namespace Presentation.Services
             {
                 Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Wrong Input!", ConsoleColor.Red);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Wrong Id Input Format! ", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -237,9 +243,9 @@ namespace Presentation.Services
             var dbDruggist = _druggistRepos.Get(id);
             if (dbDruggist == null)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("There is no druggist with this ID number.", ConsoleColor.Yellow);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("There is no druggist with this ID number.", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -254,8 +260,9 @@ namespace Presentation.Services
                 string name = Console.ReadLine();
                 if (String.IsNullOrEmpty(name))
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
-                    ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Yellow);
+                    ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Red);
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                     Console.ReadKey();
@@ -263,6 +270,7 @@ namespace Presentation.Services
                 }
                 if (name.IsDetails() == false)
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Name cannot contain numbers", ConsoleColor.Red);
                     Console.WriteLine("\n");
@@ -278,8 +286,9 @@ namespace Presentation.Services
                 string surname = Console.ReadLine();
                 if (String.IsNullOrEmpty(surname))
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
-                    ConsoleHelper.WriteWithColor("Surname is required and must be filled", ConsoleColor.Yellow);
+                    ConsoleHelper.WriteWithColor("Surname is required and must be filled", ConsoleColor.Red);
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                     Console.ReadKey();
@@ -287,6 +296,7 @@ namespace Presentation.Services
                 }
                 if (surname.IsDetails() == false)
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Surname cannot contain numbers", ConsoleColor.Red);
                     Console.WriteLine("\n");
@@ -356,7 +366,7 @@ namespace Presentation.Services
                 {
                     Console.Clear();
                     Console.WriteLine("\n");
-                    ConsoleHelper.WriteWithColor("Druggist's age cannot be set lower than his experience!", ConsoleColor.Red);
+                    ConsoleHelper.WriteWithColor("Druggist's experience cannot be set higher than his age!", ConsoleColor.Red);
                     ConsoleHelper.WriteWithColor("Please enter valid age", ConsoleColor.Yellow);
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
@@ -369,29 +379,29 @@ namespace Presentation.Services
                 var drugstores = _drugStoreRepos.GetAll();
                 foreach (var drugstore in drugstores)
                 {
-                    ConsoleHelper.WriteWithColor($"Drugstore ID : {drugstore.Id} / Drugstore Name {drugstore.Name} / Owner Fullname : {drugstore.Owner.Name} {drugstore.Owner.Surname}", ConsoleColor.Cyan);
+                    ConsoleHelper.WriteWithColor($"Drugstore ID : {drugstore.Id} / Name {drugstore.Name} / Owner Fullname : {drugstore.Owner.Name} {drugstore.Owner.Surname}", ConsoleColor.Cyan);
                     Console.WriteLine("\n");
                 }
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Enter drugstore ID to assign new druggist to", ConsoleColor.DarkYellow);
-                int _id;
-                isRightInput = int.TryParse(Console.ReadLine(), out _id);
+                int input;
+                isRightInput = int.TryParse(Console.ReadLine(), out input);
                 if (!isRightInput)
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Wrong Input! Enter drugstore ID to assign new druggist to", ConsoleColor.Red);
-                    ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                     Console.ReadKey();
                     goto DrugStoreCheck;
                 }
-                var dbDrugstore = _drugStoreRepos.Get(_id);
+                var dbDrugstore = _drugStoreRepos.Get(input);
                 if (dbDrugstore == null)
                 {
+                    Console.Clear();
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("There is no drugstore with this ID number.", ConsoleColor.Red);
-                    ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                     Console.WriteLine("\n");
                     ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                     Console.ReadKey();
@@ -437,9 +447,8 @@ namespace Presentation.Services
             Console.WriteLine("\n");
             foreach (var druggist in _druggistRepos.GetAll())
             {
-                ConsoleHelper.WriteWithColor($"Druggist ID : {druggist.Id} / Druggist Fullname : {druggist.Name} {druggist.Surname} / Drugstore ID : {druggist.DrugStore.Id} / Drugstore Name : {druggist.DrugStore.Name}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Druggist ID : {druggist.Id} / Fullname : {druggist.Name} {druggist.Surname} / Drugstore ID : {druggist.DrugStore.Id} / Name : {druggist.DrugStore.Name}", ConsoleColor.Cyan);
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("----------------------------------------------------------------------------------------------------------", ConsoleColor.DarkMagenta);
             }
             Console.WriteLine("\n");
             ConsoleHelper.WriteWithColor("Enter druggist ID to delete it's profile or 0 to return back to menu", ConsoleColor.DarkYellow);
@@ -447,11 +456,11 @@ namespace Presentation.Services
             bool isRightInput = int.TryParse(Console.ReadLine(), out id);
             if (!isRightInput)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Wrong Input! Enter druggist ID to delete it's profile", ConsoleColor.Red);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
                 goto IdCheck;
             }
@@ -462,9 +471,9 @@ namespace Presentation.Services
             var dbDruggist = _druggistRepos.Get(id);
             if (dbDruggist == null)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("There is no druggist with this ID number.", ConsoleColor.Red);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -473,8 +482,9 @@ namespace Presentation.Services
             else
             {
             yesNoCheck:
+                Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteContinuosly("Are you sure you want to remove this druggist profile y/n", ConsoleColor.Magenta);
+                ConsoleHelper.WriteContinuosly($"Are you sure you want to remove {dbDruggist.Name} {dbDruggist.Surname }druggist profile y/n", ConsoleColor.Magenta);
                 ConsoleKeyInfo cki2 = Console.ReadKey();
                 if (cki2.Key == ConsoleKey.Y)
                 {
@@ -488,7 +498,6 @@ namespace Presentation.Services
                 }
                 else if (cki2.Key == ConsoleKey.N)
                 {
-                    Console.Clear();
                     goto IdCheck;
                 }
                 else
@@ -509,7 +518,6 @@ namespace Presentation.Services
             var druggists = _druggistRepos.GetAll();
             if (druggists.Count == 0)
             {
-                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("There is no druggist profiles in database", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
@@ -517,13 +525,11 @@ namespace Presentation.Services
                 Console.ReadKey();
                 return;
             }
-            Console.Clear();
 
             foreach (var druggist in druggists)
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor($"Owner ID : {druggist.Id} / Fullname : {druggist.Name} {druggist.Surname} / Drugstore Name : {druggist.DrugStore.Name}", ConsoleColor.Cyan);
-                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor($"Druggist ID : {druggist.Id} / Fullname : {druggist.Name} {druggist.Surname} / Drugstore Name : {druggist.DrugStore.Name}", ConsoleColor.Cyan);
             }
             Console.WriteLine("\n");
             ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
@@ -532,24 +538,25 @@ namespace Presentation.Services
         public void GetAllByDrugstore()
         {
         IdCheck:
+            Console.Clear();
             var drugstores = _drugStoreRepos.GetAll();
             foreach (var drugstore in drugstores)
             {
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor($"Drugstore ID : {drugstore.Id} / Drugstore Name : {drugstore.Name} / Drugstore Owner Fullname {drugstore.Owner.Name} {drugstore.Owner.Surname} ", ConsoleColor.Cyan);
-                ConsoleHelper.WriteWithColor("----------------------------------------------------------------------------", ConsoleColor.DarkMagenta);
             }
+            ConsoleHelper.WriteWithColor("--------------------------------------------------------------------------------------------------", ConsoleColor.DarkMagenta);
             Console.WriteLine("\n");
             ConsoleHelper.WriteWithColor("Enter Drugstore ID to get all druggists working there or 0 to return back to menu", ConsoleColor.DarkYellow);
             int id;
             bool isRightInput = int.TryParse(Console.ReadLine(), out id);
             if (!isRightInput)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Wrong Input! Enter Owner ID to delete it's profile", ConsoleColor.Red);
-                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Wrong Input! Enter Drugstore ID to show list of druggists working there", ConsoleColor.Red);
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
                 goto IdCheck;
             }
@@ -568,11 +575,16 @@ namespace Presentation.Services
                 goto IdCheck;
             }
             Console.Clear();
+            ConsoleHelper.WriteWithColor($"List of Druggists", ConsoleColor.Cyan);
+            Console.WriteLine("\n");
             foreach(var druggist in druggists)
             {
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor($"Druggist ID : {druggist.Id} / Druggist Fullname : {druggist.Name} {druggist.Surname}", ConsoleColor.Cyan);
             }
+            Console.WriteLine("\n");
+            ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+            Console.ReadKey();
         }
     }
 }

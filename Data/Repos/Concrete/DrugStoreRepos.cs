@@ -20,9 +20,13 @@ namespace Data.Repos.Concrete
         {
             return DbContext.DrugStores.Where(o => o.Owner.Id == id).ToList();
         }
-        public List<Drug> GetDrugs()
+        public List<Drug> GetAvailableDrugs()
         {
             return DbContext.Drugs.Where(s => s.Count > 0).ToList();
+        }
+        public Drug BuyAvailableDrug(int id)
+        {
+            return DbContext.Drugs.FirstOrDefault(s => s.Count > 0 && s.Id == id);
         }
         public DrugStore Get(int id)
         {
@@ -50,6 +54,5 @@ namespace Data.Repos.Concrete
         {
             DbContext.DrugStores.Remove(drugStore);
         }
-
     }
 }

@@ -147,6 +147,7 @@ namespace Presentation
                                     _drugStoreService.GetAllByOwner();
                                     break;
                                 case (int)DrugStoreMenu.Sale:
+                                    _drugStoreService.Sale();
                                     break;
                                 case (int)DrugStoreMenu.MainMenu:
                                     Console.Clear();
