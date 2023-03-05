@@ -1,14 +1,7 @@
 ﻿using Core.Entities;
 using Core.Extentions;
 using Core.Helpers;
-using Data.Repos.Abstract;
 using Data.Repos.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Presentation.Services
 {
@@ -35,14 +28,16 @@ namespace Presentation.Services
                 Console.ReadKey();
                 return;
             }
+
         NameCheck:
             Console.Clear();
             ConsoleHelper.WriteContinuosly("Enter drugstore name:", ConsoleColor.DarkYellow);
             string name = Console.ReadLine();
             if (String.IsNullOrEmpty(name))
             {
+                Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Name is required and must be filled", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -56,7 +51,7 @@ namespace Presentation.Services
             if (String.IsNullOrEmpty(address))
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Address is required and must be filled", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Address is required and must be filled", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -70,7 +65,7 @@ namespace Presentation.Services
             if (String.IsNullOrEmpty(number))
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Number is required and must be filled", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Number is required and must be filled", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -93,7 +88,7 @@ namespace Presentation.Services
             if (String.IsNullOrEmpty(email))
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("Email address is required and must be filled", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("Email address is required and must be filled", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
@@ -451,6 +446,16 @@ namespace Presentation.Services
         }
         public void GetAllByOwner()
         {
+            var drugstores = _drugStoreRepos.GetAll();
+            if (drugstores.Count == 0)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("There is no drugstore profiles in database", ConsoleColor.Yellow);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                Console.ReadKey();
+                return;
+            }
         IdCheck:
             var owners = _ownerRepos.GetAll();
             foreach (var owner in owners)
@@ -476,8 +481,8 @@ namespace Presentation.Services
             {
                 return;
             }
-            var drugstores = _drugStoreRepos.GetAllByOwner(id);
-            if (drugstores.Count == 0)
+            var dbDrugstores = _drugStoreRepos.GetAllByOwner(id);
+            if (dbDrugstores.Count == 0)
             {
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("This Owner does not have any drugstores assigned to it.", ConsoleColor.Red);
@@ -492,6 +497,9 @@ namespace Presentation.Services
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor($"Drugstore ID : {drugstore.Id} / Name : {drugstore.Name} / Address  {drugstore.Address}", ConsoleColor.Cyan);
             }
+            Console.WriteLine("\n");
+            ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+            Console.ReadKey();
         }
     }
 }

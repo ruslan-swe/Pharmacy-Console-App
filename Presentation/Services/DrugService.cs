@@ -1,13 +1,6 @@
-﻿using Core.Extentions;
-using Core.Helpers;
+﻿using Core.Helpers;
 using Data.Repos.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core.Entities;
-using Data.Repos.Abstract;
 
 namespace Presentation.Services
 {
@@ -411,6 +404,142 @@ namespace Presentation.Services
                     goto yesNoCheck;
                 }
             }
+        }
+        public void GetAll()
+        {
+            Console.Clear();
+            var drugs = _drugRepos.GetAll();
+            if (drugs.Count == 0)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("There is no drug profiles in database", ConsoleColor.Yellow);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Clear();
+            foreach (var drug in drugs)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price} / Drug Count : {drug.Count}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drugstore Name and Adress :{drug.DrugStore.Name} {drug.DrugStore.Address}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drugstore Contact number :{drug.DrugStore.ContactNumber}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor("--------------------------------------------------------------------------------------------", ConsoleColor.Yellow);
+            }
+            Console.WriteLine("\n");
+            ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+            Console.ReadKey();
+
+        }
+        public void GetAllByDrugStore()
+        {
+            var drugs = _drugRepos.GetAll();
+            if (drugs.Count == 0)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("There is no drug profiles in database", ConsoleColor.Yellow);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                Console.ReadKey();
+                return;
+            }
+        IdCheck:
+            Console.WriteLine("\n");
+            ConsoleHelper.WriteWithColor("Enter Drugstore ID to get all drugs there or 0 to return back to menu", ConsoleColor.DarkYellow);
+            int id;
+            bool isRightInput = int.TryParse(Console.ReadLine(), out id);
+            if (!isRightInput)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Wrong Input! Enter drug ID to delete it's profile", ConsoleColor.Red);
+                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
+                Console.ReadKey();
+                goto IdCheck;
+            }
+            else if (id == 0)
+            {
+                return;
+            }
+            Console.Clear();
+            var dbDrugs = _drugRepos.GetAllByDrugStore(id);
+            if (dbDrugs == null)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("There is no drug in this Drugstore.", ConsoleColor.Red);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
+                Console.ReadKey();
+                goto IdCheck;
+            }
+            foreach (var drug in dbDrugs)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price} / Drug Count : {drug.Count}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor("--------------------------------------------------------------------------------------------", ConsoleColor.Yellow);
+            }
+            Console.WriteLine("\n");
+            ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+            Console.ReadKey();
+
+        }
+        public void Filter()
+        {
+            var drugs = _drugRepos.GetAll();
+            if (drugs.Count == 0)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("There is no drug profiles in database", ConsoleColor.Yellow);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                Console.ReadKey();
+                return;
+            }
+        PriceCheck:
+            ConsoleHelper.WriteWithColor("Enter Max price to show all the drugs with lower price than it or 0 to return back to menu", ConsoleColor.DarkYellow);
+            double price;
+            bool isRightInput = double.TryParse(Console.ReadLine(), out price);
+            if (!isRightInput)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Wrong Input! Enter desired price to get all the drugs lower than input", ConsoleColor.Red);
+                ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
+                Console.ReadKey();
+                goto PriceCheck;
+            }
+            else if (price == 0)
+            {
+                return;
+            }
+            var dbDrugs = _drugRepos.GetDrugsByPrice(price);
+            if(dbDrugs.Count == 0)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("There is no drugs under this price in database", ConsoleColor.Yellow);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
+                Console.ReadKey();
+                goto PriceCheck;
+            }          
+            foreach (var drug in dbDrugs)
+            {
+                if(drug.Count == 0)
+                {
+                    Console.WriteLine("\n");
+                    ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price} / Drug Count : {drug.Count}", ConsoleColor.Cyan);
+                    ConsoleHelper.WriteWithColor($"{drug.DrugStore.Name} is out of {drug.Name}", ConsoleColor.Red);
+                    ConsoleHelper.WriteWithColor("--------------------------------------------------------------------------------------------", ConsoleColor.Yellow);
+                }
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price} / Drug Count : {drug.Count}", ConsoleColor.Cyan);
+            }
+            ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
+            Console.ReadKey();
         }
     }
 }

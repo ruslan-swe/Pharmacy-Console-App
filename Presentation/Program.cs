@@ -41,10 +41,10 @@ namespace Presentation
                 ConsoleHelper.WriteWithColor("██║     ██║  ██║██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║╚██████╗   ██║       ╚██████╗╚██████╔╝██╗", ConsoleColor.Yellow);
                 ConsoleHelper.WriteWithColor("╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝   ╚═╝        ╚═════╝ ╚═════╝ ╚═╝", ConsoleColor.Yellow);
                 Console.WriteLine("\n\n");
-                ConsoleHelper.WriteWithColor("[1] - Owner Menu", ConsoleColor.Cyan);
-                ConsoleHelper.WriteWithColor("[2] - Drugstore Menu", ConsoleColor.Cyan);
-                ConsoleHelper.WriteWithColor("[3] - Druggist Menu", ConsoleColor.Cyan);
-                ConsoleHelper.WriteWithColor("[4] - Drug Menu", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor("[1] - Owners", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor("[2] - Drugstores", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor("[3] - Druggists", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor("[4] - Drugs", ConsoleColor.Cyan);
                 ConsoleHelper.WriteWithColor("[5] - Log Out", ConsoleColor.Cyan);
                 ConsoleHelper.WriteWithColor("[0] - Terminate Session", ConsoleColor.Cyan);
 
@@ -53,7 +53,7 @@ namespace Presentation
                 if (!isRightInput)
                 {
                     Console.Clear();
-                    ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 5", ConsoleColor.Red);
+                    ConsoleHelper.WriteWithColor("Incorrect input format! Please select from 0 to 5", ConsoleColor.Red);
                     goto MainMenuCheck;
                 }
                 switch (menu)
@@ -77,7 +77,7 @@ namespace Presentation
                             if (!isRightInput)
                             {
                                 Console.Clear();
-                                ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 4", ConsoleColor.Red);
+                                ConsoleHelper.WriteWithColor("Incorrect input format! Please select from 0 to 4", ConsoleColor.Red);
                                 goto OwnerMenu;
                             }
                             switch (input)
@@ -100,7 +100,7 @@ namespace Presentation
                                 default:
                                     {
                                         Console.Clear();
-                                        ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 4", ConsoleColor.Red);
+                                        ConsoleHelper.WriteWithColor("Incorrect input format! Please select from 0 to 4", ConsoleColor.Red);
                                         goto OwnerMenu;
                                     }
                             }
@@ -126,7 +126,7 @@ namespace Presentation
                             if (!isRightInput)
                             {
                                 Console.Clear();
-                                ConsoleHelper.WriteWithColor("Incorrect input format!  Please select from 0 to 6", ConsoleColor.Red);
+                                ConsoleHelper.WriteWithColor("Incorrect input format! Please select from 0 to 6", ConsoleColor.Red);
                                 goto DrugStoreMenu;
                             }
                             switch (input)
@@ -245,11 +245,14 @@ namespace Presentation
                                 case (int)DrugMenu.RemoveDrug:
                                     _drugService.Delete();
                                     break;
-                                case (int)DrugMenu.GetAllDrugs:                                  
+                                case (int)DrugMenu.GetAllDrugs:
+                                    _drugService.GetAll();
                                     break;
                                 case (int)DrugMenu.GetAllByDrugStore:
+                                    _drugService.GetAllByDrugStore();
                                     break;
                                 case (int)DrugMenu.Filter:
+                                    _drugService.Filter();
                                     break;
                                 case (int)DrugMenu.MainMenu:
                                     Console.Clear();

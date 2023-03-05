@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Data.Repos.Concrete;
+﻿using Data.Repos.Concrete;
 using Core.Helpers;
 using Core.Extentions;
 using Core.Entities;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Presentation.Services
 {
