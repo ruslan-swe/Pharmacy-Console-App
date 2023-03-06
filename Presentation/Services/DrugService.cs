@@ -165,7 +165,7 @@ namespace Presentation.Services
             Console.WriteLine("\n");
             foreach (var drug in drugs)
             {
-                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Name : {drug.Name} / Price : {drug.Price} ", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Name : {drug.Name} / Price : {drug.Price}$ ", ConsoleColor.Cyan);
                 ConsoleHelper.WriteWithColor($"Drug Count at Drugstore : {drug.Count} / Drugstore ID : {drug.DrugStore.Id} / Drugstore Name : {drug.DrugStore.Name}", ConsoleColor.Cyan);
                 Console.WriteLine("\n");
             }
@@ -319,7 +319,7 @@ namespace Presentation.Services
 
                 Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor($"Drug {oldName} with price of {oldPrice} and count of {oldCount}", ConsoleColor.DarkGreen);
+                ConsoleHelper.WriteWithColor($"Drug {oldName} with price of {oldPrice}$ and count of {oldCount}", ConsoleColor.DarkGreen);
                 ConsoleHelper.WriteWithColor($"Updated into {dbDrug.Name} with price of {dbDrug.Price}$ and count of {dbDrug.Count} successfully!", ConsoleColor.DarkGreen);
                 ConsoleHelper.WriteWithColor($"And Shipped to {dbDrug.DrugStore.Name}", ConsoleColor.DarkGreen);
                 Console.WriteLine("\n");
@@ -426,7 +426,7 @@ namespace Presentation.Services
             foreach (var drug in drugs)
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price} / Drug Count : {drug.Count}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price}$ / Drug Count : {drug.Count}", ConsoleColor.Cyan);
                 ConsoleHelper.WriteWithColor($"Drugstore Name and Adress :{drug.DrugStore.Name} {drug.DrugStore.Address}", ConsoleColor.Cyan);
                 ConsoleHelper.WriteWithColor($"Drugstore Contact number :{drug.DrugStore.ContactNumber}", ConsoleColor.Cyan);
                 ConsoleHelper.WriteWithColor("--------------------------------------------------------------------------------------------", ConsoleColor.Yellow);
@@ -443,13 +443,21 @@ namespace Presentation.Services
             if (drugs.Count == 0)
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor("There is no drug profiles in database", ConsoleColor.Yellow);
+                ConsoleHelper.WriteWithColor("There is no drug profiles in database", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
                 Console.ReadKey();
                 return;
             }
         IdCheck:
+            Console.Clear();
+
+            foreach(var drug in drugs)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price}$ / Drug Count : {drug.Count}", ConsoleColor.Cyan);
+            }
+
             Console.WriteLine("\n");
             ConsoleHelper.WriteWithColor("Enter Drugstore ID to get all drugs there or 0 to return back to menu", ConsoleColor.DarkYellow);
             int id;
@@ -483,7 +491,7 @@ namespace Presentation.Services
             foreach (var drug in dbDrugs)
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price} / Drug Count : {drug.Count}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price}$ / Drug Count : {drug.Count}", ConsoleColor.Cyan);
                 ConsoleHelper.WriteWithColor("--------------------------------------------------------------------------------------------", ConsoleColor.Yellow);
             }
             Console.WriteLine("\n");
@@ -493,6 +501,7 @@ namespace Presentation.Services
         }
         public void Filter()
         {
+            Console.Clear();
             var drugs = _drugRepos.GetAll();
             if (drugs.Count == 0)
             {
@@ -504,11 +513,13 @@ namespace Presentation.Services
                 return;
             }
         PriceCheck:
+            Console.Clear();
             ConsoleHelper.WriteWithColor("Enter Max price to show all the drugs with lower price than it or 0 to return back to menu", ConsoleColor.DarkYellow);
             double price;
             bool isRightInput = double.TryParse(Console.ReadLine(), out price);
             if (!isRightInput)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Wrong Input! Enter desired price to get all the drugs lower than input", ConsoleColor.Red);
                 ConsoleHelper.WriteWithColor("Please choose from list above", ConsoleColor.Yellow);
@@ -524,6 +535,7 @@ namespace Presentation.Services
             var dbDrugs = _drugRepos.GetDrugsByPrice(price);
             if(dbDrugs.Count == 0)
             {
+                Console.Clear();
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("There is no drugs under this price in database", ConsoleColor.Yellow);
                 Console.WriteLine("\n");
@@ -531,17 +543,19 @@ namespace Presentation.Services
                 Console.ReadKey();
                 goto PriceCheck;
             }          
+
+            Console.Clear();
             foreach (var drug in dbDrugs)
             {
                 if(drug.Count == 0)
                 {
                     Console.WriteLine("\n");
-                    ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price} / Drug Count : {drug.Count}", ConsoleColor.Cyan);
+                    ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price}$ / Drug Count : {drug.Count}", ConsoleColor.Cyan);
                     ConsoleHelper.WriteWithColor($"{drug.DrugStore.Name} is out of {drug.Name}", ConsoleColor.Red);
                     ConsoleHelper.WriteWithColor("--------------------------------------------------------------------------------------------", ConsoleColor.Yellow);
                 }
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price} / Drug Count : {drug.Count}", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Drug Name : {drug.Name} / Drug Price {drug.Price}$ / Drug Count : {drug.Count}", ConsoleColor.Cyan);
             }
             ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
             Console.ReadKey();

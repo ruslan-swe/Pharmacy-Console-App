@@ -3,6 +3,7 @@ using Core.Extentions;
 using Core.Helpers;
 using Data.Context;
 using Data.Repos.Concrete;
+using System.ComponentModel.Design;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Presentation.Services
@@ -460,7 +461,7 @@ namespace Presentation.Services
             foreach (var drugstore in drugstores)
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor($"Drugstore ID : {drugstore.Id} / Owner Fullname : {drugstore.Owner.Name} {drugstore.Owner.Surname}", ConsoleColor.DarkCyan);
+                ConsoleHelper.WriteWithColor($"Drugstore ID : {drugstore.Id} / Name : {drugstore.Name} / Owner Fullname : {drugstore.Owner.Name} {drugstore.Owner.Surname}", ConsoleColor.DarkCyan);
                 ConsoleHelper.WriteWithColor($"Adress : {drugstore.Address}", ConsoleColor.Cyan);
                 ConsoleHelper.WriteWithColor($"Contact Number : {drugstore.ContactNumber}", ConsoleColor.Cyan);
                 ConsoleHelper.WriteWithColor($"Email Address : {drugstore.Email}", ConsoleColor.Cyan);
@@ -550,12 +551,11 @@ namespace Presentation.Services
             foreach (var drug in availableDrugs)
             {
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Name : {drug.Name} / Price  {drug.Price} / Left in stock : {drug.Count} ", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Drug ID : {drug.Id} / Name : {drug.Name} / Price  {drug.Price}$ / Left in stock : {drug.Count} ", ConsoleColor.Cyan);
             }
-            ConsoleHelper.WriteWithColor("------------------------------------------------------------------------------------",ConsoleColor.DarkMagenta);
+            ConsoleHelper.WriteWithColor("------------------------------------------------------------------------------------", ConsoleColor.DarkMagenta);
             ConsoleHelper.WriteWithColor("Enter Drug ID to choose and add drugs to basket you want to buy from the list", ConsoleColor.DarkYellow);
             Console.WriteLine("\n");
-            ConsoleHelper.WriteWithColor("Press 0 return back to menu", ConsoleColor.DarkYellow);
             int id;
             bool isRightInput = int.TryParse(Console.ReadLine(), out id);
             if (!isRightInput)
@@ -567,10 +567,6 @@ namespace Presentation.Services
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
                 goto DrugsIdCheck;
-            }
-            else if (id == 0)
-            {
-                return;
             }
             var dbDrug = _drugStoreRepos.BuyAvailableDrug(id);
             if (dbDrug == null)
@@ -586,7 +582,7 @@ namespace Presentation.Services
         CountCheck:
             Console.Clear();
             Console.WriteLine("\n\n");
-            ConsoleHelper.WriteWithColor($"Drug ID : {dbDrug.Id} / Name : {dbDrug.Name} / Price  {dbDrug.Price} / Left in stock : {dbDrug.Count} ", ConsoleColor.Cyan);
+            ConsoleHelper.WriteWithColor($"Drug ID : {dbDrug.Id} / Name : {dbDrug.Name} / Price  {dbDrug.Price}$ / Left in stock : {dbDrug.Count} ", ConsoleColor.Cyan);
             ConsoleHelper.WriteWithColor("Enter amount you want to buy or 0 to choose another drug", ConsoleColor.Cyan);
             int count;
             isRightInput = int.TryParse(Console.ReadLine(), out count);
@@ -601,15 +597,11 @@ namespace Presentation.Services
                 count = 0;
                 goto CountCheck;
             }
-            else if (count == 0)
-            {
-                goto DrugsIdCheck;
-            }
             if (count > dbDrug.Count)
             {
                 Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteWithColor($"{dbDrug.Name} is left {dbDrug.Count} in Drugstore", ConsoleColor.Red);
+                ConsoleHelper.WriteWithColor($"There is only {dbDrug.Count} {dbDrug.Name} left in Drugstore", ConsoleColor.Red);
                 ConsoleHelper.WriteWithColor($"Do you want to buy all of {dbDrug.Name} that's left?", ConsoleColor.Red);
                 Console.WriteLine("\n");
                 ConsoleKeyInfo cki2 = Console.ReadKey();
@@ -621,7 +613,6 @@ namespace Presentation.Services
                 }
                 else if (cki2.Key == ConsoleKey.N)
                 {
-                    Console.Clear();
                     goto DrugsIdCheck;
                 }
                 else
@@ -639,18 +630,58 @@ namespace Presentation.Services
                 dbDrug.Count -= count;
             }
         yesNoCheck:
-            Console.Clear();
-            Console.WriteLine("\n");
-            ConsoleHelper.WriteWithColor("If you want to continue shopping press y", ConsoleColor.Red);
-            ConsoleHelper.WriteWithColor("If you want to see total and checkout press n", ConsoleColor.Red);
-            Console.WriteLine("\n");
-            ConsoleKeyInfo cki3 = Console.ReadKey();
-            if (cki3.Key == ConsoleKey.Y)
+            if (_drugStoreRepos.GetAvailableDrugs().Count != 0)
             {
-                goto DrugsIdCheck;
+                Console.Clear();
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("If you want to continue shopping press - y", ConsoleColor.Red);
+                ConsoleHelper.WriteWithColor("If you want to see total and checkout press - n", ConsoleColor.Red);
+                Console.WriteLine("\n");
+                ConsoleKeyInfo cki3 = Console.ReadKey();
+                if (cki3.Key == ConsoleKey.Y)
+                {
+                    goto DrugsIdCheck;
+                }
+                else if (cki3.Key == ConsoleKey.N)
+                {
+                    Console.Clear();
+                    var buyList = dbDrug.DrugStore.BuyList;
+                    var buyAmount = dbDrug.DrugStore.BuyAmount;
+                    double total = 0;
+                    Console.WriteLine("\n");
+                    ConsoleHelper.WriteWithColor("List of goods in basket and their total", ConsoleColor.DarkCyan);
+                    for (int i = 0; i < buyList.Count; i++)
+                    {
+                        ConsoleHelper.WriteWithColor($"|| Name|{buyList[i].Name} ||| Amount|{buyAmount[i]} ||| Price|{buyList[i].Price}$ ||| Total|{buyList[i].Price * buyAmount[i]}$ || ", ConsoleColor.Cyan);
+                        total += buyList[i].Price * buyAmount[i];
+                    }
+                    Console.WriteLine("\n\n");
+                    ConsoleHelper.WriteWithColor($"Your overall total = {total}$ ", ConsoleColor.Cyan);
+                    Console.WriteLine("\n");
+                    ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
+                    Console.ReadKey();
+
+                    dbDrug.DrugStore.BuyList.Clear();
+                    dbDrug.DrugStore.BuyAmount.Clear();
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("\n\n\n");
+                    ConsoleHelper.WriteWithColor("Please select y/n", ConsoleColor.Yellow);
+                    goto yesNoCheck;
+                }
             }
-            else if (cki3.Key == ConsoleKey.N)
+            else
             {
+                Console.Clear();
+                Console.WriteLine("\n\n");
+                ConsoleHelper.WriteWithColor("We are out of stock", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor("Proceed to checkout", ConsoleColor.Cyan);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
+                Console.ReadKey();
+
                 Console.Clear();
                 var buyList = dbDrug.DrugStore.BuyList;
                 var buyAmount = dbDrug.DrugStore.BuyAmount;
@@ -659,24 +690,17 @@ namespace Presentation.Services
                 ConsoleHelper.WriteWithColor("List of goods in basket and their total", ConsoleColor.DarkCyan);
                 for (int i = 0; i < buyList.Count; i++)
                 {
-                    ConsoleHelper.WriteWithColor($"Name - {buyList[i].Name} / Amount {buyAmount[i]} = Total {buyList[i].Price * buyAmount[i]} ", ConsoleColor.Cyan);
+                    ConsoleHelper.WriteWithColor($"|| Name|{buyList[i].Name} ||| Amount|{buyAmount[i]} ||| Price|{buyList[i].Price}$ ||| Total|{buyList[i].Price * buyAmount[i]}$ || ", ConsoleColor.Cyan);
                     total += buyList[i].Price * buyAmount[i];
                 }
                 Console.WriteLine("\n\n");
-                ConsoleHelper.WriteWithColor($"Your overall total = {total} ", ConsoleColor.Cyan);
+                ConsoleHelper.WriteWithColor($"Your overall total = {total}$ ", ConsoleColor.Cyan);
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("Press any key to continue", ConsoleColor.Yellow);
                 Console.ReadKey();
 
                 dbDrug.DrugStore.BuyList.Clear();
                 dbDrug.DrugStore.BuyAmount.Clear();
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("\n\n\n");
-                ConsoleHelper.WriteWithColor("Please select y/n", ConsoleColor.Yellow);
-                goto yesNoCheck;
             }
         }
     }

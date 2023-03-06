@@ -484,7 +484,7 @@ namespace Presentation.Services
             yesNoCheck:
                 Console.Clear();
                 Console.WriteLine("\n");
-                ConsoleHelper.WriteContinuosly($"Are you sure you want to remove {dbDruggist.Name} {dbDruggist.Surname }druggist profile y/n", ConsoleColor.Magenta);
+                ConsoleHelper.WriteContinuosly($"Are you sure you want to remove {dbDruggist.Name} {dbDruggist.Surname} druggist profile y/n", ConsoleColor.Magenta);
                 ConsoleKeyInfo cki2 = Console.ReadKey();
                 if (cki2.Key == ConsoleKey.Y)
                 {
@@ -537,6 +537,17 @@ namespace Presentation.Services
         }
         public void GetAllByDrugstore()
         {
+            Console.Clear();
+            var druggists = _druggistRepos.GetAll();
+            if (druggists.Count == 0)
+            {
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("There is no druggist profiles in database", ConsoleColor.Yellow);
+                Console.WriteLine("\n");
+                ConsoleHelper.WriteWithColor("Press any key to return to menu", ConsoleColor.Yellow);
+                Console.ReadKey();
+                return;
+            }
         IdCheck:
             Console.Clear();
             var drugstores = _drugStoreRepos.GetAll();
@@ -564,8 +575,8 @@ namespace Presentation.Services
             {
                 return;
             }
-            var druggists = _druggistRepos.GetAllByDrugStore(id);
-            if (druggists.Count == 0)
+            var dbDruggists = _druggistRepos.GetAllByDrugStore(id);
+            if (dbDruggists.Count == 0)
             {
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor("This drugstore does not have any druggist.", ConsoleColor.Red);
@@ -577,7 +588,7 @@ namespace Presentation.Services
             Console.Clear();
             ConsoleHelper.WriteWithColor($"List of Druggists", ConsoleColor.Cyan);
             Console.WriteLine("\n");
-            foreach(var druggist in druggists)
+            foreach(var druggist in dbDruggists)
             {
                 Console.WriteLine("\n");
                 ConsoleHelper.WriteWithColor($"Druggist ID : {druggist.Id} / Druggist Fullname : {druggist.Name} {druggist.Surname}", ConsoleColor.Cyan);
